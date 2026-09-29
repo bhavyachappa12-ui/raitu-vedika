@@ -93,6 +93,7 @@ export interface FarmerProfile {
   listedEquipmentIds: string[];
   bookedEquipmentIds: string[];
   role?: 'farmer' | 'owner' | 'admin';
+  gender?: 'male' | 'female';
   status?: 'active' | 'suspended';
   verified?: boolean;
   aadhaarNumber?: string;

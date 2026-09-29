@@ -108,11 +108,11 @@ export default function AuthPages({ language, onLanguageToggle, onLoginSuccess, 
   const [adminPin, setAdminPin] = useState('');
   const [farmerCoopId, setFarmerCoopId] = useState('');
 
-  // Fields for login
-  const [loginName, setLoginName] = useState('రామకృష్ణ ప్రసాద్');
-  const [loginPhone, setLoginPhone] = useState('9866012345'); // Default to existing mock user
-  const [loginEmail, setLoginEmail] = useState('farmer@example.com');
-  const [loginPassword, setLoginPassword] = useState('123456');
+  // Fields for login - clean initial state with no default dummy data
+  const [loginName, setLoginName] = useState('');
+  const [loginPhone, setLoginPhone] = useState('');
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [selectedLoginDistrict, setSelectedLoginDistrict] = useState('Anantapuramu (అనంతపురము)');
   const [selectedLoginMandal, setSelectedLoginMandal] = useState('Anantapur Urban (అనంతపురం అర్బన్)');
@@ -177,6 +177,7 @@ export default function AuthPages({ language, onLanguageToggle, onLoginSuccess, 
 
   // Fields for signup
   const [signupName, setSignupName] = useState('');
+  const [signupGender, setSignupGender] = useState<'male' | 'female'>('male');
   const [signupPhone, setSignupPhone] = useState('');
   const [signupEmail, setSignupEmail] = useState('');
   const [signupLocation, setSignupLocation] = useState('అనంతపురము'); // fallback legacy compatibility
@@ -330,6 +331,7 @@ export default function AuthPages({ language, onLanguageToggle, onLoginSuccess, 
       activeUser = { 
         ...registeredUser, 
         name: loginName.trim() || registeredUser.name,
+        gender: registeredUser.gender || loginGender,
         email: loginEmail.trim() || registeredUser.email || 'farmer@example.com',
         location: shortLocation,
         district: cleanDistrictKey,
@@ -342,6 +344,7 @@ export default function AuthPages({ language, onLanguageToggle, onLoginSuccess, 
       activeUser = {
         name: loginName.trim() || (language === 'te' ? 'నవ రైతు సభ్యులు' : 'New Farmer Member'),
         phone: phoneToUse,
+        gender: loginGender,
         email: loginEmail.trim() || 'farmer@example.com',
         location: shortLocation,
         district: cleanDistrictKey,
@@ -545,6 +548,7 @@ export default function AuthPages({ language, onLanguageToggle, onLoginSuccess, 
         name: beUser.name,
         phone: beUser.phone,
         email: beUser.email,
+        gender: beUser.gender || loginGender,
         location: beUser.location || `${beUser.village || 'Payakaraopeta'}, ${beUser.mandal || 'Payakaraopeta'} (${beUser.district || 'Anakapalli'})`,
         district: beUser.district || selectedLoginDistrict || 'Anakapalli',
         mandal: beUser.mandal || selectedLoginMandal || 'Payakaraopeta',
@@ -677,6 +681,7 @@ export default function AuthPages({ language, onLanguageToggle, onLoginSuccess, 
           phone: cleanPhone,
           email: normalizedEmail || `${cleanPhone}@eraitu.app`,
           password: signupPassword,
+          gender: signupGender,
           location: `${selectedVillage}, ${selectedCityMandal} (${selectedDistrict})`,
           district: selectedDistrict,
           mandal: selectedCityMandal,
@@ -711,6 +716,7 @@ export default function AuthPages({ language, onLanguageToggle, onLoginSuccess, 
         name: createdUser.name,
         phone: createdUser.phone,
         email: createdUser.email,
+        gender: createdUser.gender || signupGender,
         state: selectedState,
         district: selectedDistrict,
         city: selectedCityMandal,
@@ -1278,7 +1284,7 @@ export default function AuthPages({ language, onLanguageToggle, onLoginSuccess, 
                       {/* Name field as first form element */}
                       <div>
                         <label className="text-[10px] text-emerald-700 font-extrabold uppercase tracking-wider block mb-1">
-                          {language === 'te' ? '👤 మీ పేరు (Your Name) *' : '👤 Your Name (Telugu / English) *'}
+                          {language === 'te' ? '👤 మీ పేరు (Your Name) *' : '👤 Your Name *'}
                         </label>
                         <div className="relative">
                           <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400 pointer-events-none">
@@ -1288,8 +1294,8 @@ export default function AuthPages({ language, onLanguageToggle, onLoginSuccess, 
                             type="text"
                             value={loginName}
                             onChange={(e) => setLoginName(e.target.value)}
-                            placeholder={language === 'te' ? "ఉదా: రామకృష్ణ ప్రసాద్" : "e.g. Ramakrishna Prasad"}
-                            className="w-full pl-9 pr-3 py-2.5 bg-[#fbfdfa] border border-gray-200 rounded-xl text-xs font-black text-slate-800 focus:outline-none focus:border-[#1b6d24] focus:bg-white transition"
+                            placeholder={language === 'te' ? "మీ పేరు (Your Name)" : "Your Name"}
+                            className="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 placeholder:text-gray-400 placeholder:font-normal focus:outline-none focus:border-[#1b6d24] focus:bg-white transition"
                             required
                             id="input-login-name-field"
                           />
@@ -1453,9 +1459,9 @@ export default function AuthPages({ language, onLanguageToggle, onLoginSuccess, 
                                 setLoginPhone(e.target.value);
                                 if (unregisteredError) setUnregisteredError(false);
                               }}
-                              placeholder="e.g. 9866012345"
+                              placeholder={language === 'te' ? "మీ ఫోన్ నంబర్ (Your Phone Number)" : "Your Phone Number"}
                               maxLength={13}
-                              className="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 focus:outline-none focus:border-[#1b6d24] focus:bg-white transition"
+                              className="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 placeholder:text-gray-400 placeholder:font-normal focus:outline-none focus:border-[#1b6d24] focus:bg-white transition"
                               id="input-login-phone"
                             />
                           </div>
@@ -1476,8 +1482,8 @@ export default function AuthPages({ language, onLanguageToggle, onLoginSuccess, 
                                 setLoginEmail(e.target.value);
                                 if (unregisteredError) setUnregisteredError(false);
                               }}
-                              placeholder="e.g. farmer@gmail.com"
-                              className="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 focus:outline-none focus:border-[#1b6d24] focus:bg-white transition"
+                              placeholder={language === 'te' ? "మీ ఈమెయిల్ (Your Email)" : "Your Email"}
+                              className="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 placeholder:text-gray-400 placeholder:font-normal focus:outline-none focus:border-[#1b6d24] focus:bg-white transition"
                               id="input-login-email"
                             />
                           </div>
@@ -1509,8 +1515,8 @@ export default function AuthPages({ language, onLanguageToggle, onLoginSuccess, 
                               setLoginPassword(e.target.value);
                               if (unregisteredError) setUnregisteredError(false);
                             }}
-                            placeholder="••••••"
-                            className="w-full pl-9 pr-10 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-mono text-gray-800 focus:outline-none focus:border-[#1b6d24] focus:bg-white transition"
+                            placeholder={language === 'te' ? "పాస్‌వర్డ్ (Password)" : "Password"}
+                            className="w-full pl-9 pr-10 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-mono text-gray-800 placeholder:text-gray-400 placeholder:font-normal focus:outline-none focus:border-[#1b6d24] focus:bg-white transition"
                             required
                             id="input-login-pass"
                           />
@@ -1640,11 +1646,46 @@ export default function AuthPages({ language, onLanguageToggle, onLoginSuccess, 
                         type="text"
                         value={signupName}
                         onChange={(e) => setSignupName(e.target.value)}
-                        placeholder="e.g. రాఘవ రెడ్డి"
-                        className="w-full pl-8 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 focus:outline-none focus:border-[#1b6d24] focus:bg-white transition"
+                        placeholder={language === 'te' ? "మీ పేరు (Your Name)" : "Your Name"}
+                        className="w-full pl-8 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 placeholder:text-gray-400 placeholder:font-normal focus:outline-none focus:border-[#1b6d24] focus:bg-white transition"
                         required
                         id="input-signup-name"
                       />
+                    </div>
+                  </div>
+
+                  {/* Gender selection field on register (just like login page) */}
+                  <div>
+                    <label className="text-[9px] text-emerald-700 font-extrabold uppercase tracking-wider block mb-1">
+                      {language === 'te' ? '🚻 లింగం (Select Gender) *' : '🚻 Select Gender *'}
+                    </label>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setSignupGender('male')}
+                        className={`py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer border ${
+                          signupGender === 'male'
+                            ? 'bg-emerald-50 text-emerald-800 border-emerald-500 font-black'
+                            : 'bg-[#fbfdfa] text-slate-500 border-slate-200 hover:bg-slate-50'
+                        }`}
+                        id="btn-signup-gender-male"
+                      >
+                        <span>👨</span>
+                        <span>{language === 'te' ? 'పురుషుడు (Male)' : 'Male'}</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setSignupGender('female')}
+                        className={`py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer border ${
+                          signupGender === 'female'
+                            ? 'bg-emerald-50 text-emerald-800 border-emerald-500 font-black'
+                            : 'bg-[#fbfdfa] text-slate-500 border-slate-200 hover:bg-slate-50'
+                        }`}
+                        id="btn-signup-gender-female"
+                      >
+                        <span>👩</span>
+                        <span>{language === 'te' ? 'స్త్రీ (Female)' : 'Female'}</span>
+                      </button>
                     </div>
                   </div>
 
@@ -1664,9 +1705,9 @@ export default function AuthPages({ language, onLanguageToggle, onLoginSuccess, 
                             setSignupPhone(e.target.value.replaceAll(/[^0-9]/g, ''));
                             if (alreadyRegisteredError) setAlreadyRegisteredError(false);
                           }}
-                          placeholder="e.g. 9154098765"
+                          placeholder={language === 'te' ? "మీ ఫోన్ నంబర్ (Your Phone Number)" : "Your Phone Number"}
                           maxLength={10}
-                          className="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 focus:outline-none focus:border-[#1b6d24] focus:bg-white transition"
+                          className="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 placeholder:text-gray-400 placeholder:font-normal focus:outline-none focus:border-[#1b6d24] focus:bg-white transition"
                           required
                           id="input-signup-phone"
                         />
@@ -1688,8 +1729,8 @@ export default function AuthPages({ language, onLanguageToggle, onLoginSuccess, 
                             setSignupEmail(e.target.value);
                             if (alreadyRegisteredError) setAlreadyRegisteredError(false);
                           }}
-                          placeholder="e.g. farmer@gmail.com"
-                          className="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 focus:outline-none focus:border-[#1b6d24] focus:bg-white transition"
+                          placeholder={language === 'te' ? "మీ ఈమెయిల్ (Your Email)" : "Your Email"}
+                          className="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 placeholder:text-gray-400 placeholder:font-normal focus:outline-none focus:border-[#1b6d24] focus:bg-white transition"
                           id="input-signup-email"
                         />
                       </div>
@@ -1894,8 +1935,8 @@ export default function AuthPages({ language, onLanguageToggle, onLoginSuccess, 
                         type="password"
                         value={signupPassword}
                         onChange={(e) => setSignupPassword(e.target.value)}
-                        placeholder="••••"
-                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-mono text-gray-800 focus:outline-none focus:border-[#1b6d24] focus:bg-white transition"
+                        placeholder={language === 'te' ? "పాస్‌వర్డ్ (Password)" : "Password"}
+                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-mono text-gray-800 placeholder:text-gray-400 placeholder:font-normal focus:outline-none focus:border-[#1b6d24] focus:bg-white transition"
                         required
                         id="input-signup-pass"
                       />
@@ -1909,8 +1950,8 @@ export default function AuthPages({ language, onLanguageToggle, onLoginSuccess, 
                         type="password"
                         value={signupConfirmPassword}
                         onChange={(e) => setSignupConfirmPassword(e.target.value)}
-                        placeholder="••••"
-                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-mono text-gray-800 focus:outline-none focus:border-[#1b6d24] focus:bg-white transition"
+                        placeholder={language === 'te' ? "పాస్‌వర్డ్ నిర్ధారించండి" : "Confirm Password"}
+                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-mono text-gray-800 placeholder:text-gray-400 placeholder:font-normal focus:outline-none focus:border-[#1b6d24] focus:bg-white transition"
                         required
                         id="input-signup-confirm-pass"
                       />

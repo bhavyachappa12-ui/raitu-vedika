@@ -9,6 +9,7 @@ export interface BackendUser {
   mandal?: string;
   village?: string;
   role: 'farmer' | 'owner' | 'both' | 'admin';
+  gender?: 'male' | 'female';
   verified: boolean;
   status: 'active' | 'suspended';
   aadhaarNumber?: string;
