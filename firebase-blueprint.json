@@ -1,0 +1,110 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Registered farmer or equipment owner profile",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "name": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "location": { "type": "string" },
+        "role": { "type": "string" },
+        "verified": { "type": "boolean" },
+        "state": { "type": "string" },
+        "district": { "type": "string" },
+        "mandal": { "type": "string" },
+        "village": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["uid", "name", "phone"]
+    },
+    "Equipment": {
+      "title": "Equipment Listing",
+      "description": "Farm machinery or tractor listed for rental",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "titleEn": { "type": "string" },
+        "category": { "type": "string" },
+        "price": { "type": "number" },
+        "rateType": { "type": "string" },
+        "status": { "type": "string" },
+        "ownerName": { "type": "string" },
+        "ownerPhone": { "type": "string" },
+        "ownerUid": { "type": "string" },
+        "location": { "type": "string" },
+        "verified": { "type": "boolean" },
+        "rating": { "type": "number" },
+        "reviewCount": { "type": "number" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "title", "price", "ownerPhone"]
+    },
+    "Review": {
+      "title": "Equipment Review",
+      "description": "Star rating and rental experience feedback submitted by farmers",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "equipmentId": { "type": "string" },
+        "farmerName": { "type": "string" },
+        "farmerPhone": { "type": "string" },
+        "farmerId": { "type": "string" },
+        "farmerLocation": { "type": "string" },
+        "rating": { "type": "number" },
+        "comment": { "type": "string" },
+        "rentalExperience": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "verifiedRental": { "type": "boolean" }
+      },
+      "required": ["id", "equipmentId", "farmerName", "rating", "comment"]
+    },
+    "Booking": {
+      "title": "Equipment Booking",
+      "description": "Rental booking reservation between farmer and owner",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "equipmentId": { "type": "string" },
+        "farmerUid": { "type": "string" },
+        "farmerPhone": { "type": "string" },
+        "ownerPhone": { "type": "string" },
+        "startDate": { "type": "string" },
+        "endDate": { "type": "string" },
+        "totalAmount": { "type": "number" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "equipmentId", "farmerPhone", "ownerPhone", "totalAmount"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/User"
+      },
+      "description": "Collection storing user and farmer profile accounts"
+    },
+    "/equipments/{equipmentId}": {
+      "schema": {
+        "$ref": "#/entities/Equipment"
+      },
+      "description": "Collection storing machinery listings"
+    },
+    "/bookings/{bookingId}": {
+      "schema": {
+        "$ref": "#/entities/Booking"
+      },
+      "description": "Collection storing equipment rental bookings"
+    },
+    "/reviews/{reviewId}": {
+      "schema": {
+        "$ref": "#/entities/Review"
+      },
+      "description": "Collection storing farmer reviews and star ratings for equipment rentals"
+    }
+  }
+}

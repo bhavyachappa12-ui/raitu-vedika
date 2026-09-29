@@ -1,0 +1,6 @@
+{
+  "name": "Raitu Vedika",
+  "description": "Interactive Telugu agricultural equipment rental and sharing platform for farmers to share equipment and reduce expenses.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
