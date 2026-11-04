@@ -53,13 +53,13 @@ The main objective of Raitu Vedika is to reduce the difficulties farmers face in
 1. Clone the repository:
 
    ```bash
-   git clone YOUR_GITHUB_REPOSITORY_URL
+   git clone https://github.com/bhavyachappa12-ui/raitu-vedika.git
    ```
 
 2. Open the project folder:
 
    ```bash
-   cd YOUR_PROJECT_FOLDER
+   cd raitu-vedika
    ```
 
 3. Install dependencies:
